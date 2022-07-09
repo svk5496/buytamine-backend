@@ -1,4 +1,5 @@
-import client from "../client";
+import { GraphQLUpload } from "graphql-upload";
+import client from "../../client";
 
 export default {
   Query: {
@@ -9,4 +10,5 @@ export default {
         },
       }),
   },
+  Upload: GraphQLUpload,
 };
