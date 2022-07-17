@@ -119,8 +119,7 @@ export default {
               }),
               ...(mainStandardObjs.length > 0 && {
                 mainStandards: {
-                  set: [], //기존에 연결된걸 없애줌.
-                  connectOrCreate: mainStandardObjs,
+                  create: mainStandardObjs,
                 },
               }),
             },
@@ -133,7 +132,13 @@ export default {
           }
         }
 
-        await client.product.create({
+        client.product.findMany({
+          where: {
+            rawMaterials: {},
+          },
+        });
+
+        const newProduct = await client.product.create({
           data: {
             name,
             productListReportNo,
@@ -168,11 +173,19 @@ export default {
             }),
             ...(mainStandardObjs.length > 0 && {
               mainStandards: {
-                connectOrCreate: mainStandardObjs,
+                create: mainStandardObjs,
               },
             }),
           },
         });
+
+        if (!newProduct) {
+          console.log("why?");
+          return {
+            ok: false,
+            error: "there is no new Product",
+          };
+        }
         return {
           ok: true,
           error: "Creation Succeed",

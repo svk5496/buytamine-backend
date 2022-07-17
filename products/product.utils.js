@@ -1,11 +1,17 @@
 export const processRawMaterials = (rawMaterial) => {
+  const rawMaterialArray = [];
   const rawMaterials = rawMaterial.match(
-    /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|\w)α.%( -]+\([^)]*\)|[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|\w)α.%( -]+/g
+    /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|\w)α.%( -]+\([^)]*\)+|[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|\w)α.%( -]+\[(.*?)\]|[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|\w)α.%( -]+/g
   );
-  return rawMaterials.map((rawMaterial) => ({
-    where: { rawMaterial },
-    create: { rawMaterial },
-  }));
+
+  rawMaterials.map((rawMaterial) => {
+    const withOutSpace = rawMaterial.replace(/\s/g, "");
+    rawMaterialArray.push({
+      where: { rawMaterial: withOutSpace },
+      create: { rawMaterial: withOutSpace },
+    });
+  });
+  return rawMaterialArray;
 };
 
 export const processPrimaryFunctions = (primaryFunction) => {
@@ -19,11 +25,28 @@ export const processPrimaryFunctions = (primaryFunction) => {
 };
 
 export const processMainStandards = (mainStandard) => {
+  const mainStandardArray = [];
+
   const mainStandards = mainStandard.match(/[^\n|\r]+/g);
-  return mainStandards.map((mainStandard) => ({
-    where: { mainStandard },
-    create: { mainStandard },
-  }));
+  mainStandards.map((mainStandard) => {
+    const withOutSpace = mainStandard.replace(/\s/g, "");
+    const withOutNumber = withOutSpace.replace(
+      /\([^]\)+|^[0-9.)(]+|[⓪①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿⒀⒁⒂⒃⒄⒅⒆⒇*]+/g,
+      ""
+    );
+    let msArray = withOutNumber.match(/[^:]+/g);
+    mainStandardArray.push({
+      // where: {
+      //   mainStandard: msArray[0],
+
+      //   amount: msArray[1],
+      // },
+      // create: { mainStandard: msArray[0], amount: msArray[1] },
+      mainStandard: msArray[0],
+      amount: msArray[1],
+    });
+  });
+  return mainStandardArray;
 };
 
 export const processIntakeAttentions = (intakeAttention) => {

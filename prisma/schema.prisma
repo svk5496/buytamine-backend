@@ -49,9 +49,9 @@ model Product {
   intakeAttentions          IntakeAttention[] //서취시 주의사항
   rawMaterials              RawMaterial[] //원료
   primaryFunctions          PrimaryFunction[] //핵심기능
-  mainStandards             MainStandard[] //기능원료
   nutrients                 Nutrient[] //기능원료
   healthGoals               HealthGoal[] //증상
+  mainStandards             MainStandard[]
   productClicks             ProductClick[]
   createdAt                 DateTime          @default(now())
   updatedAt                 DateTime          @updatedAt
@@ -93,7 +93,8 @@ model PrimaryFunction {
 
 model MainStandard {
   id           Int       @id @default(autoincrement())
-  mainStandard String    @unique
+  mainStandard String
+  amount       String?
   products     Product[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt

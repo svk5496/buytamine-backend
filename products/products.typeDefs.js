@@ -49,7 +49,10 @@ export default gql`
   type MainStandard {
     id: Int!
     mainStandard: String!
-    products: [Product]
+    amount: String
+    product: Product
+    createdAt: String!
+    updatedAt: String!
   }
 
   type Brand {
